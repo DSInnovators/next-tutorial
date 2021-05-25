@@ -1,14 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useState } from "react";
-
-const allCountries = [
-  "Cambodia",
-  "Russia",
-  "Bolivia",
-  "Mauritania",
-]
+import { useEffect, useState } from "react";
 
 function ActionItem({label, action, handleChange}) {
   return (
@@ -25,8 +18,45 @@ function ActionItem({label, action, handleChange}) {
   )
 }
 
+const SelectedCountryCard = ({countryList, removeHandler}) =>
+  <div className={styles.card}>
+    <h2>Selected</h2>
+    <ul>
+      {countryList.map(c =>
+        <ActionItem key={c} label={c} action="-" handleChange={removeHandler}/>)}
+    </ul>
+  </div>
+
+const AvailableCountryCard = ({countryList, alreadyAddedList, addHandler}) =>
+  <div className={styles.card}>
+    <h2>Choose From</h2>
+    <ul>
+      {countryList
+        .filter(c => !alreadyAddedList.includes(c))
+        .map(c =>
+          <ActionItem key={c} label={c} action="+" handleChange={addHandler}/>)}
+    </ul>
+  </div>
+
+
 export default function Home() {
   const [selectedCountries, setSelectedCountries] = useState([])
+  const [allCountries, setAllCountries] = useState([])
+
+  useEffect(async function () {
+    console.log("Going to fetch...")
+    const response = await fetch("https://restcountries.eu/rest/v2/all")
+    if (!response.ok) {
+      console.log("fetch was unsuccessful")
+      return
+    }
+
+    const result = await response.json()
+    console.log("result.length", result.length)
+
+    const countryNames = result.map(item => item.name)
+    setAllCountries(countryNames)
+  }, [])
 
   function handleAdd(country) {
     setSelectedCountries(selectedCountries.concat(country))
@@ -51,23 +81,13 @@ export default function Home() {
         </h1>
 
         <div className={styles.grid}>
-          <div className={styles.card}>
-            <h2>Selected</h2>
-            <ul>
-              {selectedCountries.map(c =>
-                <ActionItem key={c} label={c} action="-" handleChange={handleRemove}/>)}
-            </ul>
-          </div>
+          <SelectedCountryCard
+            countryList={selectedCountries}
+            removeHandler={handleRemove}/>
 
-          <div className={styles.card}>
-            <h2>Choose From</h2>
-            <ul>
-              {allCountries
-                .filter(c => !selectedCountries.includes(c))
-                .map(c =>
-                <ActionItem key={c} label={c} action="+" handleChange={handleAdd}/>)}
-            </ul>
-          </div>
+          <AvailableCountryCard countryList={allCountries}
+                                alreadyAddedList={selectedCountries}
+                                addHandler={handleAdd}/>
         </div>
 
       </main>

@@ -2,6 +2,18 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+const selectedCountries = [
+  "Afghanistan",
+  "Guyana",
+]
+
+const allCountries = [
+  "Cambodia",
+  "Russia",
+  "Bolivia",
+  "Mauritania",
+]
+
 function ActionItem({label, action}) {
   return <li>{label} <a href="#" onClick={e => e.preventDefault()} style={{float: "right", marginLeft: "1rem"}}>{action}</a></li>
 }
@@ -24,18 +36,14 @@ export default function Home() {
           <div className={styles.card}>
             <h2>Selected</h2>
             <ul>
-              <ActionItem label="Afghanistan" action="-"/>
-              <ActionItem label="Guyana" action="-"/>
+              {selectedCountries.map(c => <ActionItem key={c} label={c} action="-"/>)}
             </ul>
           </div>
 
           <div className={styles.card}>
             <h2>Choose From</h2>
             <ul>
-              <ActionItem label="Cambodia" action="+"/>
-              <ActionItem label="Russia" action="+"/>
-              <ActionItem label="Bolivia" action="+"/>
-              <ActionItem label="Mauritania" action="+"/>
+              {allCountries.map(c => <ActionItem key={c} label={c} action="+"/>)}
             </ul>
           </div>
         </div>

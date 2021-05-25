@@ -2,6 +2,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+function ActionItem({label, action}) {
+  return <li>{label} <a href="#" onClick={e => e.preventDefault()} style={{float: "right", marginLeft: "1rem"}}>{action}</a></li>
+}
+
 export default function Home() {
   return (
     <div className={styles.container}>
@@ -20,19 +24,18 @@ export default function Home() {
           <div className={styles.card}>
             <h2>Selected</h2>
             <ul>
-              <li>Afghanistan &nbsp;<a href="#" style={{float: "right"}}>-</a></li>
-              <li>Guyana &nbsp;<a href="#" style={{float: "right"}}>-</a></li>
+              <ActionItem label="Afghanistan" action="-"/>
+              <ActionItem label="Guyana" action="-"/>
             </ul>
           </div>
 
           <div className={styles.card}>
             <h2>Choose From</h2>
             <ul>
-              <li>Cambodia &nbsp;<a href="#" style={{float: "right"}}>+</a></li>
-              <li>Russia</li>
-              <li>Brazil</li>
-              <li>Canada</li>
-              <li>Mexico</li>
+              <ActionItem label="Cambodia" action="+"/>
+              <ActionItem label="Russia" action="+"/>
+              <ActionItem label="Bolivia" action="+"/>
+              <ActionItem label="Mauritania" action="+"/>
             </ul>
           </div>
         </div>

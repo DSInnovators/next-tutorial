@@ -62,7 +62,9 @@ export default function Home() {
           <div className={styles.card}>
             <h2>Choose From</h2>
             <ul>
-              {allCountries.map(c =>
+              {allCountries
+                .filter(c => !selectedCountries.includes(c))
+                .map(c =>
                 <ActionItem key={c} label={c} action="+" handleChange={handleAdd}/>)}
             </ul>
           </div>

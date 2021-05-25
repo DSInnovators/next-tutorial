@@ -20,15 +20,15 @@ export default function Home() {
           <div className={styles.card}>
             <h2>Selected</h2>
             <ul>
-              <li>Afghanistan</li>
-              <li>Guyana</li>
+              <li>Afghanistan &nbsp;<a href="#" style={{float: "right"}}>-</a></li>
+              <li>Guyana &nbsp;<a href="#" style={{float: "right"}}>-</a></li>
             </ul>
           </div>
 
           <div className={styles.card}>
             <h2>Choose From</h2>
             <ul>
-              <li>Cambodia</li>
+              <li>Cambodia &nbsp;<a href="#" style={{float: "right"}}>+</a></li>
               <li>Russia</li>
               <li>Brazil</li>
               <li>Canada</li>

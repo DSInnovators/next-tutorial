@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function ActionItem({label, action, handleChange}) {
   return (
@@ -18,6 +19,24 @@ function ActionItem({label, action, handleChange}) {
   )
 }
 
+function ActionItemWithLink({label, href, action, handleChange}) {
+  return (
+    <li>
+      <Link href={href}>{label}</Link>
+
+      <a href="#"
+         onClick={function (e) {
+           e.preventDefault()
+           handleChange(label)
+         }}
+         style={{float: "right", marginLeft: "1rem"}}>
+        {action}
+      </a>
+    </li>
+  )
+}
+
+
 const SelectedCountryCard = ({countryList, removeHandler}) =>
   <div className={styles.card}>
     <h2>Selected</h2>
@@ -32,9 +51,13 @@ const AvailableCountryCard = ({countryList, alreadyAddedList, addHandler}) =>
     <h2>Choose From</h2>
     <ul>
       {countryList
-        .filter(c => !alreadyAddedList.includes(c))
+        .filter(c => !alreadyAddedList.includes(c.name))
         .map(c =>
-          <ActionItem key={c} label={c} action="+" handleChange={addHandler}/>)}
+          <ActionItemWithLink key={c.name}
+                              label={c.name}
+                              href={`/countries/${c.alpha3Code}`}
+                              action="+"
+                              handleChange={addHandler}/>)}
     </ul>
   </div>
 
@@ -89,11 +112,14 @@ export async function getServerSideProps() {
   const result = await response.json()
   console.log("result.length", result.length)
 
-  const countryNames = result.map(item => item.name)
+  const countries = result.map(item => ({
+    name: item.name,
+    alpha3Code: item.alpha3Code
+  }))
 
   return {
     props: {
-      allCountries: countryNames
+      allCountries: countries
     }
   }
 }

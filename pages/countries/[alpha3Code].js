@@ -35,7 +35,7 @@ const Country = ({name, capital, population, area, languages, currencies, flag})
 
           <dt>Flag</dt>
           <dd>
-            <Image src={flag} height="256"/>
+            <Image src={flag} width="256" height="128"/>
           </dd>
         </dl>
       </div>
@@ -45,7 +45,8 @@ const Country = ({name, capital, population, area, languages, currencies, flag})
 
 export async function getServerSideProps({ params }) {
   const { alpha3Code: code } = params
-  const response = await fetch(`https://restcountries.eu/rest/v2/alpha/{code}`)
+  console.log("Going to fetch country:", code)
+  const response = await fetch(`https://restcountries.eu/rest/v2/alpha/${code}`)
   if (!response.ok) {
     console.log("fetch with code was unsuccessful")
     return

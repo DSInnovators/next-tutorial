@@ -101,8 +101,8 @@ export default function Home({ allCountries }) {
   )
 }
 
-export async function getServerSideProps() {
-  console.log("Going to fetch...")
+export async function getStaticProps() {
+  console.log("Going to fetch all countries")
   const response = await fetch("https://restcountries.eu/rest/v2/all")
   if (!response.ok) {
     console.log("fetch was unsuccessful")
@@ -110,7 +110,7 @@ export async function getServerSideProps() {
   }
 
   const result = await response.json()
-  console.log("result.length", result.length)
+  console.log("Fetched countries:", result.length)
 
   const countries = result.map(item => ({
     name: item.name,

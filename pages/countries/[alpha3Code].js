@@ -43,7 +43,7 @@ const Country = ({name, capital, population, area, languages, currencies, flag})
 
   </div>
 
-export async function getServerSideProps({ params }) {
+export async function getStaticProps({ params }) {
   const { alpha3Code: code } = params
   console.log("Going to fetch country:", code)
   const response = await fetch(`https://restcountries.eu/rest/v2/alpha/${code}`)
@@ -57,6 +57,25 @@ export async function getServerSideProps({ params }) {
   return {
     props: result
   }
+}
+
+export async function getStaticPaths() {
+  console.log("Getting list of all countries")
+  const response = await fetch("https://restcountries.eu/rest/v2/all")
+  if (!response.ok) {
+    console.log("fetch was unsuccessful")
+    return
+  }
+  const result = await response.json()
+
+  console.log("Got countries:", result.length)
+
+  const paths = result.map(c => ({ params: {alpha3Code: c.alpha3Code} }))
+  return {
+    paths,
+    fallback: false
+  }
+
 }
 
 export default Country
